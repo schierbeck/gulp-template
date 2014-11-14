@@ -68,12 +68,20 @@ gulp.task('js-lint', function() {
 		.pipe(jshint.reporter(stylish));
 });
 
+gulp.task('js-compress', function() {
+  gulp.src('docroot/assets/javascripts/*.js')
+    .pipe(uglify('script.min.js', {
+    	outSourceMap: true
+    }))
+    .pipe(gulp.dest('docroot/assets/javascripts'))
+});
+
 /**
  * BROWSER SYNC
  */
 gulp.task('browser-sync', function() {
-	browserSync.init(['docroot/assets/css/*.css', 'docroot/assets/javascripts/*.js'], {
-		// proxy: "local.reportage.se"
+	browserSync.init(['docroot/assets/css/*.css', 'docroot/assets/javascripts/*.js', 'docroot/*.html'], {
+		// proxy: "local.mysite.com"
 		server: {
 			baseDir: "docroot"
 		}
@@ -90,5 +98,6 @@ gulp.task('default', function() {
 	})
 	gulp.watch('docroot/assets/javascripts/*.js', function() {
 		gulp.run('js-lint');
+		//gulp.run('js-compress');
 	});
 });
